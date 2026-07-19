@@ -77,14 +77,23 @@ def run_one(panel: pd.DataFrame, y: str, consec: str):
                 f"pyfixest model has no .{m}() — check installed version and adapt run_did.py"
             )
 
+    beta3 = _scalar(model.coef(), term)
+    se = _scalar(model.se(), term)
+    # Standardized (SD-unit) effect: z-scoring the dependent variable is a linear
+    # rescale, so beta3_sd = beta3 / SD(y) and se_sd = se / SD(y); the t-stat and
+    # p-value are UNCHANGED. beta3_sd is comparable across outcomes (in SDs of y).
+    sd_y = float(usable[y].std(ddof=1))
     return {
         "outcome": y,
         "consec_coding": consec,
         "n_appearances": len(usable),
-        "beta3": _scalar(model.coef(), term),
-        "se": _scalar(model.se(), term),
+        "beta3": beta3,
+        "se": se,
         "t": _scalar(model.tstat(), term),
         "p_value": _scalar(model.pvalue(), term),
+        "sd_y": sd_y,
+        "beta3_sd": beta3 / sd_y,
+        "se_sd": se / sd_y,
     }
 
 

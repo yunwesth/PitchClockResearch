@@ -271,6 +271,12 @@ decimals for release_speed/pfx_z/xBAA. Numbers confirmed correct.
 - Env: `.venv/` (gitignore-worthy). Deps in `requirements.txt`.
 
 ### Session history (newest first)
+#### 2026-07-19 — Standardized dependent variables (SD-unit β₃)
+- `run_did.py` + `event_study.py` now report `beta3_sd`/`coef_sd`, `se_sd`, `sd_y`
+  (β/SD(y)); p-values unchanged (linear rescale). Verified: re-estimating on
+  z-scored y equals analytic β/SD exactly. All standardized primary β₃ < 0.02 SD.
+- FINDINGS.md §8.1 + §0 updated with SD-unit effect sizes. Pushed to GitHub.
+
 #### 2026-07-19 — Event study / parallel-trends (ref 2022) — implemented + PASSED
 - `event_study.py`: consec_day interacted with each season, 2022 reference; writes
   `results/event_study.csv`. Pre-trend test (2021) PASSES for all 4 outcomes

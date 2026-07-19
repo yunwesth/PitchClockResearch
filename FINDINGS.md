@@ -20,8 +20,9 @@ other file. Companion code lives alongside it (see §11)._
   null is credible and not masking a pre-existing trend.
 - **Bottom line for interpretation:** The data are consistent with the pitch clock
   having **no meaningful impact** on consecutive-day reliever fatigue as measured
-  here. Estimated effects are not just insignificant but **tiny in magnitude**
-  (e.g., ~0.03 mph on a ~94.8 mph fastball).
+  here. Estimated effects are not just insignificant but **tiny in magnitude** —
+  every standardized β₃ is **< 0.02 SD** of its outcome (e.g., ~0.03 mph on a
+  ~94.8 mph fastball). See §8.1 for standardized (SD-unit) effect sizes.
 
 ---
 
@@ -188,12 +189,22 @@ for velocity/movement (worse stuff) and **β₃ > 0** for xBAA (worse outcomes).
 
 ### 8.1 Primary — IL-filtered, (a) back-to-back · N = 18,824 (xBAA N = 16,370)
 
-| Outcome | β₃ | SE | p-value | Significant? |
-|---|---|---|---|---|
-| release_speed | +0.0318 | 0.0342 | 0.354 | no |
-| pfx_x | −0.0060 | 0.0060 | 0.315 | no |
-| pfx_z | +0.0052 | 0.0047 | 0.266 | no |
-| xBAA | +0.0005 | 0.0058 | 0.932 | no |
+β₃ shown in **raw units** and **standardized (SD) units**. Standardizing the
+dependent variable (z-scoring y) is a linear rescale: `β₃_sd = β₃ / SD(y)`, so
+**t-stats and p-values are identical** — SD units only aid magnitude comparison
+across outcomes. All CSVs include `beta3_sd`, `se_sd`, `sd_y` columns.
+
+| Outcome | β₃ (raw) | SE (raw) | SD(y) | **β₃ (SD units)** | p-value | Significant? |
+|---|---|---|---|---|---|---|
+| release_speed | +0.0318 mph | 0.0342 | 2.654 | **+0.012** | 0.354 | no |
+| pfx_x | −0.0060 ft | 0.0060 | 0.679 | **−0.009** | 0.315 | no |
+| pfx_z | +0.0052 ft | 0.0047 | 0.280 | **+0.019** | 0.266 | no |
+| xBAA | +0.0005 | 0.0058 | 0.139 | **+0.004** | 0.932 | no |
+
+**Standardized reading:** every effect is **< 0.02 standard deviations** of its
+outcome — negligible. For reference, a "small" effect in social science is ~0.2 SD;
+these are ~10–50× smaller. This reinforces that the null reflects a genuine absence
+of a meaningful effect, not merely low precision.
 
 ### 8.2 Robustness — IL-filtered, (b) intensity (appearances in prior 3 days)
 

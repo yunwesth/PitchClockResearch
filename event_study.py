@@ -67,20 +67,29 @@ def run_event_study(panel: pd.DataFrame, y: str, terms: list[str]):
     )
     model.summary()
 
+    # SD of y for standardized (SD-unit) coefficients; z-scoring y is a linear
+    # rescale so coef_sd = coef / SD(y), se_sd = se / SD(y); p-value unchanged.
+    sd_y = float(usable[y].std(ddof=1))
+
     rows = []
     # base term = reference-year (2022) consec-day gap
     label_map = {"consec_day": REF_YEAR}
     label_map.update({f"consec_x_{yr}": yr for yr in EVENT_YEARS})
     for term, yr in label_map.items():
+        coef = _scalar(model.coef(), term)
+        se = _scalar(model.se(), term)
         rows.append({
             "outcome": y,
             "year": yr,
             "relative_to_ref": (yr - REF_YEAR),
             "is_reference": (yr == REF_YEAR),
             "is_pretrend_test": (yr < REF_YEAR),
-            "coef": _scalar(model.coef(), term),
-            "se": _scalar(model.se(), term),
+            "coef": coef,
+            "se": se,
             "p_value": _scalar(model.pvalue(), term),
+            "sd_y": sd_y,
+            "coef_sd": coef / sd_y,
+            "se_sd": se / sd_y,
         })
     return rows
 
