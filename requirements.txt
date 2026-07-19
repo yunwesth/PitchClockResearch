@@ -1,0 +1,8 @@
+# Pinned to versions verified working on this machine (Python 3.9.6).
+# NOTE: pyfixest must stay <0.19 on Python 3.9 — newer pyfixest uses 3.10+
+# syntax (`str | bool`) and fails to import on 3.9.
+pybaseball==2.2.7
+pandas==2.3.3
+numpy==2.0.2
+pyarrow==21.0.0
+pyfixest==0.18.0

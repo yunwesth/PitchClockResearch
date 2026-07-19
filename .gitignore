@@ -1,0 +1,13 @@
+# Python environment
+.venv/
+__pycache__/
+*.pyc
+
+# Cached / derived data (reproducible by re-running the pipeline)
+data/
+
+# Session-specific helper (hardcoded scratchpad path)
+watch_progress.sh
+
+# OS / editor cruft
+.DS_Store
