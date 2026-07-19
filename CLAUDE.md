@@ -271,6 +271,14 @@ decimals for release_speed/pfx_z/xBAA. Numbers confirmed correct.
 - Env: `.venv/` (gitignore-worthy). Deps in `requirements.txt`.
 
 ### Session history (newest first)
+#### 2026-07-19 — Event study / parallel-trends (ref 2022) — implemented + PASSED
+- `event_study.py`: consec_day interacted with each season, 2022 reference; writes
+  `results/event_study.csv`. Pre-trend test (2021) PASSES for all 4 outcomes
+  (p: velo .21, pfx_x .81, pfx_z .21, xBAA .72; none <.05). Post years also n.s.
+- Also pushed repo to GitHub (public): github.com/yunwesth/PitchClockResearch
+  (code + results only; .venv/ and data/ gitignored). NOTE: event_study.py +
+  event_study.csv + FINDINGS event-study section not yet pushed — needs a commit.
+
 #### 2026-07-19 — Full real-data run complete (primary + baseline)
 - Downloaded all 878 pitcher-seasons of Statcast (721,806 pitch rows, cached).
 - Fixed `fetch_statcast` bug: it returned the whole cache, not the roster subset —
