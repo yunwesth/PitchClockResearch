@@ -204,6 +204,9 @@ FULL RUN COMPLETE on real 2021–2024 data. Pipeline
 - **Finding: β₃ is NOT significant for any of the 4 outcomes in any spec**
   (all p > 0.13; primary-spec p: velo .35, pfx_x .32, pfx_z .27, xBAA .93). i.e. no
   detectable change in consecutive-day fatigue accumulation post-pitch-clock.
+  All standardized (SD-unit) primary β₃ are **< 0.02 SD** — genuinely negligible,
+  not just underpowered (`beta3_sd`/`se_sd`/`sd_y` cols in results CSVs, §8.1 of
+  FINDINGS.md).
 - Statcast fully cached in `data/statcast_raw.parquet` (all 878 combos, 721,806
   pitch rows), so re-runs need no download.
 
@@ -271,6 +274,15 @@ decimals for release_speed/pfx_z/xBAA. Numbers confirmed correct.
 - Env: `.venv/` (gitignore-worthy). Deps in `requirements.txt`.
 
 ### Session history (newest first)
+#### 2026-07-19 — Q&A follow-up on standardization (no code changes)
+- Daniel asked how standardization was computed and how many regressions ran.
+  Clarified: `beta3_sd = beta3 / SD(y)` is a post-hoc rescale of the already-fitted
+  coefficient (no second regression run), SD taken within each outcome's own
+  non-null estimation sample (ddof=1), only y is standardized (not the consec_day
+  dummy), p-values identical by construction. Regression count: **4 outcomes ×
+  2 consec-day specs = 8** for the primary DID (not 3 — xBAA was a stub early on
+  and got mistaken for missing). No files touched this exchange.
+
 #### 2026-07-19 — Standardized dependent variables (SD-unit β₃)
 - `run_did.py` + `event_study.py` now report `beta3_sd`/`coef_sd`, `se_sd`, `sd_y`
   (β/SD(y)); p-values unchanged (linear rescale). Verified: re-estimating on
