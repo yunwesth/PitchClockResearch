@@ -194,8 +194,9 @@ pd.DataFrame(rows).to_csv("results/did_results.csv", index=False)
 ## Progress log
 
 ### Current state
-FULL RUN COMPLETE on real 2021–2024 data. Pipeline
-`reliever_list.py` → `build_panel.py` → `run_did.py` all ran end-to-end.
+FULL RUN COMPLETE on real 2021–2024 data, plus 4 result figures now generated in
+`results/figures/`. Pipeline `reliever_list.py` → `build_panel.py` → `run_did.py`
+all ran end-to-end.
 - Primary (IL-filtered, roster 459 pitcher-seasons): panel **18,824 appearances /
   289 pitchers**; results in `results/did_results.csv` (a, back-to-back) and
   `results/did_results_intensity.csv` (b, intensity N=3).
@@ -229,7 +230,15 @@ Pipeline order: `reliever_list.py` → `build_panel.py` → `run_did.py`.
   vcov={"CRV1":"pitcher_id"})`; β₃ = `post:{consec}` term. Loops `SPECS`:
   main (`consec_day`) → `results/did_results.csv`, robustness (`consec_intensity_3`)
   → `results/did_results_intensity.csv`. Outcomes list = `OUTCOMES` (4).
-- **`event_study.py`** — stub (NotImplementedError). **`AI_USAGE.md`** — disclosure log.
+- **`event_study.py`** — implemented (not a stub): consec_day × season interactions,
+  2022 reference year, writes `results/event_study.csv`.
+- **`generate_figures.py`** — new (2026-07-29), uses the `dataviz` skill. Reads the
+  4 results CSVs + panel and writes 4 PNGs to `results/figures/`: fig1 (β₃ CI plot,
+  primary spec), fig2 (β₃ CI plot, intensity spec), fig3 (event-study coefs by
+  year, 2022 normalized to 0), fig4 (raw descriptive trends, no FE). Fixed a bug
+  where fig3 plotted the 2022 reference year at its raw/unnormalized coefficient
+  instead of 0 — check this file if event-study figures ever look off-scale again.
+- **`AI_USAGE.md`** — disclosure log.
 
 **panel.parquet schema:** pitcher_id, game_date, player_name, release_speed, pfx_x,
 pfx_z, n_ff_pitches, xBAA, ab_count, season, post, consec_day, consec_intensity_3.
@@ -262,6 +271,10 @@ decimals for release_speed/pfx_z/xBAA. Numbers confirmed correct.
 ### Next steps
 - [ ] Daniel to review the null result; decide on robustness specs (parallel-trends
       event study, 2025 data, alt filters, IL transfers, N sensitivity for (b)).
+- [ ] A leftover scratch file `generate_figures.py.tmp_readtranscript.py` was
+      created at the repo root this session (used to parse the Claude Code
+      transcript for this journal update, unrelated to the research pipeline) —
+      delete it, the assistant couldn't due to a sandboxed `rm` approval prompt.
 
 ### Gotchas / blockers
 - Only Python 3.9.6 on this machine → **pyfixest must be <0.19** (0.18.0 pinned);
@@ -274,6 +287,23 @@ decimals for release_speed/pfx_z/xBAA. Numbers confirmed correct.
 - Env: `.venv/` (gitignore-worthy). Deps in `requirements.txt`.
 
 ### Session history (newest first)
+#### 2026-07-29 — Generated result figures (`generate_figures.py`, dataviz skill)
+- New `generate_figures.py` produces 4 PNGs in `results/figures/` from the
+  existing results CSVs (no new regressions run): fig1 = β₃ point estimate + 95%
+  CI per outcome (primary back-to-back spec) — all 4 CIs contain 0; fig2 = same
+  for the intensity (robustness) spec; fig3 = event-study coefficients by season
+  (2022 = reference); fig4 = raw descriptive appearance-level trends by
+  consecutive-day status, no FE, with a 2023 pitch-clock line.
+- Caught and fixed a bug in fig3: the 2022 reference year was being plotted at
+  its raw/unnormalized regression coefficient instead of exactly 0, which mixed
+  scales with the other (normalized) year coefficients. Now correctly zeroed.
+  Also fixed a title/annotation clipping issue (margins) in one figure.
+  event_study.py itself (the regression) was not touched — only the plotting
+  script had the bug.
+- All 3 edits this session were to `generate_figures.py`; `event_study.py` was
+  only read, not modified. Figures visually confirm the null result: CIs are
+  wide and straddle 0, and the 2021 pre-trend point is not significant.
+
 #### 2026-07-19 — Q&A follow-up on standardization (no code changes)
 - Daniel asked how standardization was computed and how many regressions ran.
   Clarified: `beta3_sd = beta3 / SD(y)` is a post-hoc rescale of the already-fitted
